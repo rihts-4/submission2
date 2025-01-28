@@ -42,7 +42,16 @@ const App = () => {
         }, 5000)
         setNewName('')
         setNewNumber('')
-      }) 
+      })
+      .catch(error => {
+        setErrorMessage(error.response.data.error)
+        setTimeout(() => {
+          setErrorMessage(null)
+        }, 5000)
+        setNewName('')
+        setNewNumber('')
+        console.log(error.response.data.error)
+      })
     : window.confirm(`${newName} is already added to phonebook, replace the old number with a new one?`) ?
     personService
       .update(person.id, personObject)
@@ -57,14 +66,14 @@ const App = () => {
       })
       .catch(error => {
         setErrorMessage(
-          `Information of ${newName} has already been removed from server`
+          error.response.data.error
         )
         setTimeout(() => {
           setErrorMessage(null)
         }, 5000)
-        setPersons(persons.filter(person => person.name !== newName))
         setNewName('')
         setNewNumber('')
+        console.log(error.response.data.error)
       })
     : setNewName('')
     setNewNumber('')
